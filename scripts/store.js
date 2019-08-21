@@ -10,8 +10,8 @@ const store = (function () {
   let hideCheckedItems = false;
   let searchTerm = ''
   
-  function findById(id) {
-    return store.items.find(id => store.items.id === id);
+  function findById(item){
+    return $(item).closest('.js-item-element').data('item-id');
   }
 
   function addItem(name){
@@ -24,8 +24,9 @@ const store = (function () {
   }
 
   function findAndToggleChecked(id){
-    let checkedId = this.findById(id)
-    return checkedId.checked = !checkedId.checked;
+    console.log(id);
+    const foundItem = store.items.find(item => item.id === id);
+    foundItem.checked = !foundItem.checked;
     }
   
 
@@ -43,13 +44,16 @@ const store = (function () {
 
   function findAndDelete(id) {
     console.log(`findAndDelete running:  attempting to delete item with id: ${id}`);
-    let targetIndex;
-    for(let i = 0; i < this.items.length; i++){
-      if(this.items[i].id === id){
-        targetIndex = i;
-      }
-    }
+    let targetIndex = store.items.findIndex(item => item.id === id);
     this.items.splice(targetIndex, 1);
+  }
+
+  function toggleCheckedFilter() {
+    store.hideCheckedItems = !store.hideCheckedItems;
+  }
+
+  function setSearchTerm (val) {
+    this.searchTerm = val;
   }
 
 
@@ -61,6 +65,8 @@ const store = (function () {
     addItem : addItem,
     findAndToggleChecked : findAndToggleChecked,
     findAndUpdateName : findAndUpdateName,
-    findAndDelete : findAndDelete
+    findAndDelete : findAndDelete,
+    toggleCheckedFilter : toggleCheckedFilter,
+    setSearchTerm : setSearchTerm
   }
 })();
